@@ -164,7 +164,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
                 <div class="modal-header">
-                  <h2 class="modal-title"><span class="fa fa-street-view"> Best Friend Found</span></h2>
+                  <h2 class="modal-title"><span class="fa fa-street-view" id="modalTitle"> Best Friend Found</span></h2>
                 </div>
                 <div class="modal-body">
                     <div id="friendName" style="font-size: 24px; font-weight: bold; margin: 20px;"></div>
@@ -174,7 +174,7 @@
                     <div id="friendScore" style="font-size: 18px; font-weight: bold; margin: 20px;"></div>
                 </div>
                 <div class="modal-footer">
-                  <button type="submit" class="btn btn-success" id="friendConfirm" data-dismiss="modal">Awesome</button>
+                  <button type="submit" class="btn btn-success" id="friendConfirm" data-dismiss="modal">Awesome, a New Friend!!</button>
               </div>
           </div>
         </div>
@@ -184,8 +184,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript">
+
+    // Submit Name, Image and Answers on 'Submit' click
         $("#submit").on("click", function(event) {
             event.preventDefault();
+            // create new friend object
             var newFriend = {
                 name: $("#name-input").val().trim(),
                 image: $("#image-input").val().trim(),
@@ -203,49 +206,60 @@
                 ]
             };
 
-            $.post("/api/friends", newFriend)
-            .done(function(data) {
-                console.log(data);
-                    $("#name-input").val("")
-                    $("#image-input").val("")
-                    $("#question1").val("") 
-                    $("#question2").val("")
-                    $("#question3").val("")
-                    $("#question4").val("")
-                    $("#question5").val("")
-                    $("#question6").val("")
-                    $("#question7").val("")
-                    $("#question8").val("")
-                    $("#question9").val("")
-                    $("#question10").val("")
-            });  
-            
-            $.get("/api/friends", function(data) {
+            if (newFriend.name === "" || newFriend.image === "" || newFriend.scores[0] === "" || newFriend.scores[1] === "" || newFriend.scores[2] === "" || newFriend.scores[3] === "" || newFriend.scores[4] === "" || newFriend.scores[5] === "" || newFriend.scores[6] === "" || newFriend.scores[7] === "" || newFriend.scores[8] === "" || newFriend.scores[9] === "") {
+                $('#friendName').text('Please make sure all fields have been filled!!');
+                $('#modalTitle').text(' Best Friend NOT Found');
+                $('#friendConfirm').text('Enter All Fields');
+                $('#friendConfirm').removeClass('btn-success');
+                $('#friendConfirm').addClass('btn-danger');
 
-                var compareFriends = [];
-                var currentFriend = data[data.length-1].scores;
-                var difference = [];
-                var count = 0;
+	        } else {
+                $.post("/api/friends", newFriend)
+                .done(function(data) {
+                    console.log(data);
+                        $("#name-input").val("")
+                        $("#image-input").val("")
+                        $("#question1").val("") 
+                        $("#question2").val("")
+                        $("#question3").val("")
+                        $("#question4").val("")
+                        $("#question5").val("")
+                        $("#question6").val("")
+                        $("#question7").val("")
+                        $("#question8").val("")
+                        $("#question9").val("")
+                        $("#question10").val("")
+                });  
                 
-                for (var i = 0; i < data.length-1; i++) {
-                    var score = data[i].scores;
-                    for(var j = 0; j < score.length; j++) {
-                        var diff = Math.abs(currentFriend[j] - score[j]);
-                        count += diff;                        
+                $.get("/api/friends", function(data) {
+
+                    var compareFriends = [];
+                    var currentFriend = data[data.length-1].scores;
+                    var difference = [];
+                    var count = 0;
+                    
+                    for (var i = 0; i < data.length-1; i++) {
+                        var score = data[i].scores;
+                        for(var j = 0; j < score.length; j++) {
+                            var diff = Math.abs(currentFriend[j] - score[j]);
+                            count += diff;                        
+                        }
+                        difference.push(count);
+                        count = 0;
                     }
-                    difference.push(count);
-                    count = 0;
-                }
-                var index = difference.indexOf(Math.min.apply(null,difference));
+                    var index = difference.indexOf(Math.min.apply(null,difference));
 
-                $('#friendName').text(data[index].name);
-
-                $('#friendImage').attr('src',data[index].image);
-                $('#friendScore').text(`You were only seperated by ${difference[index]} points!!`);
-
-                $('#name-Imput').focus();
-            });
-        });
+                    $('#modalTitle').text(' Best Friend Found');
+                    $('#friendConfirm').text('Awesome, a New Friend!!');
+                    $('#friendConfirm').addClass('btn-success');
+                    $('#friendConfirm').removeClass('btn-danger');
+                    $('#friendName').text(data[index].name);
+                    $('#friendImage').attr('src',data[index].image);
+                    $('#friendScore').text(`You were only seperated by ${difference[index]} points!!`);
+                });
+            }
+        cd });
+        
     </script>
     
 </body>
