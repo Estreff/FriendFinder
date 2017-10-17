@@ -73,7 +73,22 @@
             2,
             2
             ]
-        }
+    },{
+        "name": "Yoda",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTho2pPOpckPAoA2a2PB3_8VHjVOuiEFNgZbdH4RiJwqu244ko1",
+        "scores": [
+          2,
+          3,
+          5,
+          3,
+          4,
+          2,
+          3,
+          3,
+          1,
+          3
+        ]
+      }
 
     
 ];

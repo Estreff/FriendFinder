@@ -128,7 +128,7 @@
                             </select>
                         
                         <h2><strong>Question 9</strong></h2>
-                        <h3>TI expect Star Wars IX to be the best one in the series!</h3>
+                        <h3>I expect Star Wars IX to be the best one in the series!</h3>
                             <select placecholder="Select an Option" class="form-control custom-select" style="width:auto" id="question9">
                                 <option value="">Select an Option</option>
                                 <option value="1">1 (Strongly Disagree)</option>
@@ -155,7 +155,7 @@
             </div>
             <div style="margin-top:20px;">
                 <a href="/" style=" margin-right: 20px"><button class="btn btn-info btn-lg" style="margin-bottom: 20px"><span class=" fa fa-home"></span> Go to Home Page</button></a>
-                <a href="/api">API Friends List</a> | <a href="https:github.com/estreff/FriendFinder">Git Hub Repository</a>
+                <a href="/api/friends">API Friends List</a> | <a href="https:github.com/estreff/FriendFinder">Git Hub Repository</a>
             </div>
 
         </div>
@@ -212,6 +212,8 @@
                 $('#friendConfirm').text('Enter All Fields');
                 $('#friendConfirm').removeClass('btn-success');
                 $('#friendConfirm').addClass('btn-danger');
+                $('#friendImage').attr('src', "");
+                $('#friendScore').text("");
 
 	        } else {
                 $.post("/api/friends", newFriend)
@@ -230,9 +232,15 @@
                         $("#question9").val("")
                         $("#question10").val("")
                 });  
+
+                $('#modalTitle').text(' Best Friend Found');
+                $('#friendConfirm').text('Awesome, a New Friend!!');
+                $('#friendConfirm').addClass('btn-success');
+                $('#friendConfirm').removeClass('btn-danger');
+
                 
                 $.get("/api/friends", function(data) {
-
+                    
                     var compareFriends = [];
                     var currentFriend = data[data.length-1].scores;
                     var difference = [];
@@ -249,10 +257,6 @@
                     }
                     var index = difference.indexOf(Math.min.apply(null,difference));
 
-                    $('#modalTitle').text(' Best Friend Found');
-                    $('#friendConfirm').text('Awesome, a New Friend!!');
-                    $('#friendConfirm').addClass('btn-success');
-                    $('#friendConfirm').removeClass('btn-danger');
                     $('#friendName').text(data[index].name);
                     $('#friendImage').attr('src',data[index].image);
                     $('#friendScore').text(`You were only seperated by ${difference[index]} points!!`);
