@@ -154,9 +154,14 @@
                 <hr style="border: 2px solid gray">
             </div>
             <div style="margin-top:20px;">
-                <a href="/" style=" margin-right: 20px"><button class="btn btn-info btn-lg" style="margin-bottom: 20px"><span class=" fa fa-home"></span> Go to Home Page</button></a>
-                <a href="/api/friends">API Friends List</a> | <a href="https://github.com/estreff/FriendFinder">Git Hub Repository</a>
+                <div class="col-md-2 col-xs-12 text-center">
+                    <a href="/" style=" margin-right: 20px"><button class="btn btn-info btn-lg" style="margin-bottom: 20px"><span class=" fa fa-home"></span> Go to Home Page</button></a>
+                </div>   
+                <div class="col-md-4 col-xs-12 text-center" style="line-height: 40px"> 
+                    <a href="/api/friends">API Friends List</a> | <a href="https://github.com/estreff/FriendFinder">Git Hub Repository</a>
+                </div>
             </div>
+
 
         </div>
         <!-- Matched Friend Modal -->
@@ -218,51 +223,50 @@
 	        } else {
                 $.post("/api/friends", newFriend)
                 .done(function(data) {
-                    console.log(data);
-                        $("#name-input").val("")
-                        $("#image-input").val("")
-                        $("#question1").val("") 
-                        $("#question2").val("")
-                        $("#question3").val("")
-                        $("#question4").val("")
-                        $("#question5").val("")
-                        $("#question6").val("")
-                        $("#question7").val("")
-                        $("#question8").val("")
-                        $("#question9").val("")
-                        $("#question10").val("")
-                });  
+                    $("#name-input").val("")
+                    $("#image-input").val("")
+                    $("#question1").val("") 
+                    $("#question2").val("")
+                    $("#question3").val("")
+                    $("#question4").val("")
+                    $("#question5").val("")
+                    $("#question6").val("")
+                    $("#question7").val("")
+                    $("#question8").val("")
+                    $("#question9").val("")
+                    $("#question10").val("")
 
-                $('#modalTitle').text(' Best Friend Found');
-                $('#friendConfirm').text('Awesome, a New Friend!!');
-                $('#friendConfirm').addClass('btn-success');
-                $('#friendConfirm').removeClass('btn-danger');
+                    $('#modalTitle').text(' Best Friend Found');
+                    $('#friendConfirm').text('Awesome, a New Friend!!');
+                    $('#friendConfirm').addClass('btn-success');
+                    $('#friendConfirm').removeClass('btn-danger');
 
-                
-                $.get("/api/friends", function(data) {
                     
-                    var compareFriends = [];
-                    var currentFriend = data[data.length-1].scores;
-                    var difference = [];
-                    var count = 0;
-                    
-                    for (var i = 0; i < data.length-1; i++) {
-                        var score = data[i].scores;
-                        for(var j = 0; j < score.length; j++) {
-                            var diff = Math.abs(currentFriend[j] - score[j]);
-                            count += diff;                        
+                    $.get("/api/friends", function(data) {
+                        
+                        var compareFriends = [];
+                        var currentFriend = data[data.length-1].scores;
+                        var difference = [];
+                        var count = 0;
+                        
+                        for (var i = 0; i < data.length-1; i++) {
+                            var score = data[i].scores;
+                            for(var j = 0; j < score.length; j++) {
+                                var diff = Math.abs(currentFriend[j] - score[j]);
+                                count += diff;                        
+                            }
+                            difference.push(count);
+                            count = 0;
                         }
-                        difference.push(count);
-                        count = 0;
-                    }
-                    var index = difference.indexOf(Math.min.apply(null,difference));
+                        var index = difference.indexOf(Math.min.apply(null,difference));
 
-                    $('#friendName').text(data[index].name);
-                    $('#friendImage').attr('src',data[index].image);
-                    $('#friendScore').text(`You were only seperated by ${difference[index]} points!!`);
-                });
+                        $('#friendName').text(data[index].name);
+                        $('#friendImage').attr('src',data[index].image);
+                        $('#friendScore').text(`You were only seperated by ${difference[index]} points!!`);
+                    });
+                });  
             }
-        cd });
+        });
         
     </script>
     
